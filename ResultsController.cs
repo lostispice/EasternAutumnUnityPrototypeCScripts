@@ -38,10 +38,12 @@ public class ResultsController : MonoBehaviour, ISave
     // Start is called before the first frame update
     void Start()
     {
-        // TODO - Player's progress should be saved to their profile here
         RetrieveValues();
         ResultCheckerTarget();
         PopulateReport();
+        // Saves results to the player's save file.
+        SaveProfile(SaveManager.instance.player);
+        SaveManager.instance.SaveProfile();
     }
 
     // Update is called once per frame
@@ -50,14 +52,15 @@ public class ResultsController : MonoBehaviour, ISave
     }
 
     // Saves player progress (ISave)
-    public void SaveProfile(ref PlayerProfile playerProfile)
+    public void SaveProfile(PlayerProfile player)
     {
-        playerProfile.target = this.targetPass;
-        playerProfile.award = this.awardPass;
+        player.playerName = playerName;
+        player.target = this.targetPass;
+        player.award = this.awardPass;
     }
 
-    // From ISave
-    public void LoadProfile(PlayerProfile playerProfile) { }
+    // From ISave, not used in this script
+    public void LoadProfile(PlayerProfile player) { }
 
     // Retrieve values from game session
     public void RetrieveValues()

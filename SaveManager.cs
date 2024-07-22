@@ -6,11 +6,14 @@ using System.Linq;
 // TODO - Not working properly, requires rework
 public class SaveManager : MonoBehaviour
 {
-    // Save file name, should correspond with "player character name + .json"
-    [SerializeField] string playerName;
+    public PlayerProfile player;
 
-    private PlayerProfile playerProfile;
+    // Save file name, should correspond with "player character name + .json"
+    [SerializeField] string fileName;
+
+    // Used to list all scenes that use ISave behaviour.
     private List<ISave> saveObjects;
+
     private SaveFileHandler saveFileHandler;
 
     // Singleton class
@@ -23,35 +26,39 @@ public class SaveManager : MonoBehaviour
 
     void Start()
     {
-        this.saveFileHandler = new SaveFileHandler(Application.persistentDataPath, playerName);
+        this.saveFileHandler = new SaveFileHandler(Application.persistentDataPath, fileName);
         this.saveObjects = FindAllSaveObjects();
     }
 
-    public void NewProfile()
+    public void NewProfile(string nameInput)
     {
-        this.playerProfile = new PlayerProfile();
+        this.player = new PlayerProfile(nameInput);
     }
 
     public void LoadProfile()
     {
-        this.playerProfile = saveFileHandler.Load();
+        this.player = saveFileHandler.Load();
 
         foreach (ISave saveObj in saveObjects)
         {
-            saveObj.LoadProfile(playerProfile);
+            saveObj.LoadProfile(player);
         }
     }
 
     public void SaveProfile()
     {
-        playerName = PlayerPrefs.GetString("playerName") + ".json";
-        // Causes null error
         foreach (ISave saveObj in saveObjects)
         {
-            saveObj.SaveProfile(ref playerProfile);
+            saveObj.SaveProfile(player);
         }
 
-        saveFileHandler.Save(playerProfile);
+        saveFileHandler.Save(player);
+    }
+
+    // Saves player profile on application exit
+    private void OnApplicationQuit()
+    {
+        SaveProfile();
     }
 
     // Creates list of all scenes/scripts that use saving behaviour

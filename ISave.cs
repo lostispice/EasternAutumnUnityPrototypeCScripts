@@ -4,8 +4,7 @@ using UnityEngine;
 
 public interface ISave
 {
-    void LoadProfile(PlayerProfile profile);
+    void LoadProfile(PlayerProfile player);
 
-    // Uses pass-by-reference to write data 
-    void SaveProfile(ref PlayerProfile profile);   
+    void SaveProfile(PlayerProfile player);   
 }

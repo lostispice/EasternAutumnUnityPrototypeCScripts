@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-// Requires rework. Main Menu may need its own MainMenuController instead of interfacing directly wtih PlayerProfile?
 [System.Serializable]
-public class PlayerProfile : MonoBehaviour
+public class PlayerProfile
 {    
     public string playerName;
     [SerializeField] int difficulty;
@@ -17,24 +15,20 @@ public class PlayerProfile : MonoBehaviour
     // Empty constructor
     public PlayerProfile()
     {
+        this.playerName = "";
+        // Default difficulty (Easy)
+        this.difficulty = 0;
+        this.target = false;
+        this.award = false;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    // Constructor that requires nameInput string. TODO - implement this with profile selection screen
+    public PlayerProfile(string nameInput)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void StartGameplaySession(int difficulty)
-    {
-        PlayerPrefs.SetString("playerName", playerName);
-        PlayerPrefs.SetInt("difficulty", difficulty);
-        SceneManager.LoadScene("GameplaySession");
+        this.playerName = nameInput;
+        // Default difficulty (Easy)
+        this.difficulty = 0;
+        this.target = false;
+        this.award = false;
     }
 }

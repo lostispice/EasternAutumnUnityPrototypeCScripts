@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-// TODO - Prerequisite scripts not working properly. Not tested.
 public class SaveFileHandler
 {
     private string dataDirPath = "";
@@ -17,6 +16,9 @@ public class SaveFileHandler
 
     public PlayerProfile Load()
     {
+        // TODO - This file name should be dynamic for different characters/profiles. Presently this uses a premade file
+        dataFileName = "Arno.json";
+
         // Uses Path.Combine for cross-OS compatibility
         string fullPath = Path.Combine(dataDirPath, dataFileName);
         PlayerProfile loadedData = null;
@@ -37,7 +39,7 @@ public class SaveFileHandler
             }
             catch
             {
-                Debug.LogError("File could not be saved to:" + fullPath + "\n");
+                Debug.LogError("File could not be loaded");
             }
         }
         return loadedData;
@@ -45,6 +47,8 @@ public class SaveFileHandler
 
     public void Save(PlayerProfile player)
     {
+        // Sets save file name based on player character name
+        dataFileName = player.playerName + ".json";
         // Uses Path.Combine for cross-OS compatibility
         string fullPath = Path.Combine(dataDirPath, dataFileName);
         try
@@ -53,6 +57,8 @@ public class SaveFileHandler
 
             // serialise object to Json file
             string dataToStore = JsonUtility.ToJson(player, true);
+
+            // write serialised data to file
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
                 using (StreamWriter writer = new StreamWriter(stream))
