@@ -4,13 +4,13 @@ public class MailController : MonoBehaviour
 {
 
     // Values for "new mail item" animations
-    public bool newMailRequest = false;
-    public Vector2 destinationStart = new Vector2(-10, 0);
-    public Vector2 destinationNew = new Vector2(0, 0);
+    [SerializeField] bool newMailRequest = false;
+    [SerializeField] Vector2 destinationStart = new Vector2(-10, 0);
+    [SerializeField] Vector2 destinationNew = new Vector2(0, 0);
 
     // Values for "send mail item" offscreen animations
-    public bool sendMail = false;
-    public Vector2 destinationSend = new Vector2(100, 0);
+    [SerializeField] bool sendMail = false;
+    [SerializeField] Vector2 destinationSend = new Vector2(100, 0);
 
     // Start is called before the first frame update
     void Start()

@@ -7,52 +7,50 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    // TODO - Used in messages, imported via PlayerPrefs. Currently not yet implemented.
+    // TODO - Used in messages panel, set by SaveManger.instance.player.playerName.
     //[SerializeField] string playerName;
 
-    // Value from 0 - 3 
-    [SerializeField] int difficulty;
-
-    // Gameplay Targets. Need to write a method that sets targets based on difficulty/session id.
+    // Gameplay Targets. TODO - Write a method that sets targets based on difficulty/session id.
+    // TODO - Implement target modifier that can be adjusted in main menu
     [SerializeField] int targetMin;
     [SerializeField] int targetComm;
     [SerializeField] int targetAward;
     [SerializeField] int score;
 
     // Used to update target sheet textboxes displayed to player at start of session
-    public TextMeshProUGUI targetMinText;
-    public TextMeshProUGUI targetCommText;
-    public TextMeshProUGUI targetAwardText;
+    [SerializeField] TextMeshProUGUI targetMinText;
+    [SerializeField] TextMeshProUGUI targetCommText;
+    [SerializeField] TextMeshProUGUI targetAwardText;
 
     // Used to generate country playset for the given difficulty level
-    IDictionary<int, List<string>> nations = new Dictionary<int, List<string>>();
+    [SerializeField] IDictionary<int, List<string>> nations = new Dictionary<int, List<string>>();
 
     // UI text written on mail item
-    public TextMeshProUGUI mailAddress;
+    [SerializeField] TextMeshProUGUI mailAddress;
 
     // Used to generate a random challenge and then checked against the player's answer
-    int challenge;
-    int answer;
+    [SerializeField] int challenge;
+    [SerializeField] int answer;
 
-    // Life-counter, this could be modifable in the options menu?
+    // Life-counter. TODO - Implement lifecount modifier that can be adjusted in main menu
     [SerializeField] int lifeCount;
 
     // Used to manage the Messages (life counter) panel
-    public GameObject buttonUnread;
-    public GameObject buttonRead;
-    public TextMeshProUGUI lifeMessages;
-    bool firstMessage = true;
-    int messageCount;
+    [SerializeField] GameObject buttonUnread;
+    [SerializeField] GameObject buttonRead;
+    [SerializeField] TextMeshProUGUI lifeMessages;
+    [SerializeField] bool firstMessage = true;
+    [SerializeField] int messageCount;
 
     // Timer value, measured in seconds.
-    // TODO - countdownTimer may be difficulty-dependant. Currently uses placeholder fixed value
+    // TODO - Implement lifecount modifier that can be adjusted in main menu. Consider raising the timer value for higher difficulties
     [SerializeField] float countdownTimer = 60;
-    bool pauseTimer = true;
+    [SerializeField] bool pauseTimer = true;
 
     // Used to end the game session
-    public GameObject gameplayUI;
-    public GameObject endUI;
-    public TextMeshProUGUI endMessage;
+    [SerializeField] GameObject gameplayUI;
+    [SerializeField] GameObject endUI;
+    [SerializeField] TextMeshProUGUI endMessage;
 
     // Start is called before the first frame update
     void Start()
@@ -68,7 +66,8 @@ public class GameController : MonoBehaviour
         GameTimer();
     }
 
-    // Resets the gameplay counters to default values. Cross-reference with player modifiers?
+    // Resets the gameplay counters to default values.
+    // TODO - Difficulty-dependant targets?
     public void ResetValues()
     {
         targetMin = 5;
@@ -83,7 +82,7 @@ public class GameController : MonoBehaviour
     public void GeneratePlayset()
     {
         // Import settings from main menu
-        difficulty = PlayerPrefs.GetInt("difficulty");
+        // difficulty = PlayerPrefs.GetInt("difficulty");
         nations.Add(1, new List<string> { "Tirana", "Durres", "Vlore" });                   // Albania
         nations.Add(2, new List<string> { "Sofia", "Plovdiv", "Varna" });                   // Bulgaria
         nations.Add(3, new List<string> { "Budapest", "Debrecen", "Miskolc" });             // Hungary
@@ -124,7 +123,7 @@ public class GameController : MonoBehaviour
     // Randomised generation of the mail item's address
     public void countryRandomiser()
     {
-        if (difficulty == 0)
+        if (SaveManager.instance.player.difficulty == 0)
         {
             // Lowest difficulty [0] only uses countries #1 - 6
             challenge = Random.Range(1, 7);
@@ -139,14 +138,14 @@ public class GameController : MonoBehaviour
     public string AddressGenerator()
     {
         // Diifficulty determines how many cities are generated per nation. [0 & 1] = 1, [2] = 2, [3] = 3
-        if (difficulty == 0)
+        if (SaveManager.instance.player.difficulty == 0)
         {
             return nations[challenge][0];
 
         }
         else
         {
-            return nations[challenge][difficulty - 1];
+            return nations[challenge][SaveManager.instance.player.difficulty - 1];
         }
         
     }

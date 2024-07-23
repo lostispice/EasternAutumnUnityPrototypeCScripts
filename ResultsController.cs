@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class ResultsController : MonoBehaviour, ISave
 {
-    // Foreign key values from GameController.cs
-    [SerializeField] string playerName;
+    // Gameplay session stats, imported from GameController.cs
     [SerializeField] int score;
     [SerializeField] int lifeCount;
     [SerializeField] int targetMin;
@@ -20,19 +19,19 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] bool awardPass;
 
     // Textboxes to be updated on the report sheet
-    public TextMeshProUGUI playerHeader;
-    public TextMeshProUGUI playerSubHeader;
-    public TextMeshProUGUI playerScore;
-    public TextMeshProUGUI targetMinText;
-    public TextMeshProUGUI targetCommText;
-    public TextMeshProUGUI targetAwardText;
-    public TextMeshProUGUI remarksText;
+    [SerializeField] TextMeshProUGUI playerHeader;
+    [SerializeField] TextMeshProUGUI playerSubHeader;
+    [SerializeField] TextMeshProUGUI playerScore;
+    [SerializeField] TextMeshProUGUI targetMinText;
+    [SerializeField] TextMeshProUGUI targetCommText;
+    [SerializeField] TextMeshProUGUI targetAwardText;
+    [SerializeField] TextMeshProUGUI remarksText;
 
     // Cross/Tick symbols used to report if player has met target, .SetActive(true);
-    public GameObject commMarkPass;
-    public GameObject commMarkFail;
-    public GameObject awardMarkPass;
-    public GameObject awardMarkFail;
+    [SerializeField] GameObject commMarkPass;
+    [SerializeField] GameObject commMarkFail;
+    [SerializeField] GameObject awardMarkPass;
+    [SerializeField] GameObject awardMarkFail;
 
 
     // Start is called before the first frame update
@@ -40,10 +39,9 @@ public class ResultsController : MonoBehaviour, ISave
     {
         RetrieveValues();
         ResultCheckerTarget();
-        PopulateReport();
-        // Saves results to the player's save file.
-        SaveProfile(SaveManager.instance.player);
-        SaveManager.instance.SaveProfile();
+        PopulateReport();        
+        SaveProfile(SaveManager.instance.player); // Saves results to the active player profile.        
+        SaveManager.instance.SaveProfile(); // Saves profile changes to JSON save file
     }
 
     // Update is called once per frame
@@ -51,12 +49,12 @@ public class ResultsController : MonoBehaviour, ISave
     {
     }
 
-    // Saves player progress (ISave)
+    // Saves player award progress (ISave)
     public void SaveProfile(PlayerProfile player)
     {
-        player.playerName = playerName;
-        player.target = this.targetPass;
-        player.award = this.awardPass;
+        SaveManager.instance.player.awards[SaveManager.instance.player.difficulty + "T"] = targetPass;
+        SaveManager.instance.player.awards[SaveManager.instance.player.difficulty + "A"] = awardPass;
+        SaveManager.instance.player.extraLives[SaveManager.instance.player.difficulty] = commendationPass;
     }
 
     // From ISave, not used in this script
@@ -65,7 +63,6 @@ public class ResultsController : MonoBehaviour, ISave
     // Retrieve values from game session
     public void RetrieveValues()
     {
-        playerName = PlayerPrefs.GetString("playerName");
         score = PlayerPrefs.GetInt("score");
         lifeCount = PlayerPrefs.GetInt("lifeCount");
         targetMin = PlayerPrefs.GetInt("targetMin");
@@ -121,8 +118,8 @@ public class ResultsController : MonoBehaviour, ISave
     // Populates textboxes with gameplay statistics & results
     public void PopulateReport()
     {
-        playerHeader.text = "Staff Report: " + playerName;
-        playerSubHeader.text = playerName + ": ";
+        playerHeader.text = "Staff Report: " + SaveManager.instance.player.playerName;
+        playerSubHeader.text = SaveManager.instance.player.playerName + ": ";
         playerScore.text = score.ToString();
         targetMinText.text = targetMin.ToString();
         targetCommText.text = targetComm.ToString();
@@ -168,22 +165,22 @@ public class ResultsController : MonoBehaviour, ISave
         if (awardPass)
         {
             // Finnish - "Allís well that ends well!"
-            remarksText.text = playerName + " has proven themselves to be an exemplary employee. \n Loppu hyvin, kaikki hyvin! - Karhu";
+            remarksText.text = SaveManager.instance.player.playerName + " has proven themselves to be an exemplary employee. \n Loppu hyvin, kaikki hyvin! - Karhu";
         }
         else if (commendationPass)
         {
             // Finnish - "Slowly itíll go well."
-            remarksText.text = playerName + " has exceeded expectations admirably. \n Hiljaa hyv‰ tulee. - Karhu";
+            remarksText.text = SaveManager.instance.player.playerName + " has exceeded expectations admirably. \n Hiljaa hyv‰ tulee. - Karhu";
         }
         else if (targetPass)
         {
             // Finnish - "No one is born a smith."
-            remarksText.text = playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole sepp‰ syntyess‰‰n. - Karhu";
+            remarksText.text = SaveManager.instance.player.playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole sepp‰ syntyess‰‰n. - Karhu";
         }
         else
         {
             // Finnish - "Itís no use crying at the marketplace."
-            remarksText.text = playerName + " appears unfit for this role and has been marked for termination. \n Ei auta itku markkinoilla. - Karhu";
+            remarksText.text = SaveManager.instance.player.playerName + " appears unfit for this role and has been marked for termination. \n Ei auta itku markkinoilla. - Karhu";
         }
     }
 

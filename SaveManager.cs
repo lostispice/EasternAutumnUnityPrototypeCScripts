@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-// TODO - Not working properly, requires rework
 public class SaveManager : MonoBehaviour
 {
     public PlayerProfile player;
@@ -12,11 +11,12 @@ public class SaveManager : MonoBehaviour
     [SerializeField] string fileName;
 
     // Used to list all scenes that use ISave behaviour.
-    private List<ISave> saveObjects;
+    [SerializeField] List<ISave> saveObjects;
 
-    private SaveFileHandler saveFileHandler;
+    // Used to write save data to JSON file
+    [SerializeField] SaveFileHandler saveFileHandler;
 
-    // Singleton class
+    // Singleton
     public static SaveManager instance { get; private set; }
 
     void Awake()
@@ -35,9 +35,10 @@ public class SaveManager : MonoBehaviour
         this.player = new PlayerProfile(nameInput);
     }
 
-    public void LoadProfile()
+    // Loads a profile using a player name
+    public void LoadProfile(string playerName)
     {
-        this.player = saveFileHandler.Load();
+        this.player = saveFileHandler.Load(playerName);
 
         foreach (ISave saveObj in saveObjects)
         {

@@ -7,22 +7,16 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     // Current Active player
-    PlayerProfile player;
+    [SerializeField] PlayerProfile player;
 
-    // Placeholder value for playerPrefs
-    [SerializeField] string playerName;
-    // Placeholder values, used to test award system.
     // TODO - Create dictionary that contains award data based on difficulty. public SerializableDictionary<key, bool> achievements;
-    [SerializeField] bool target;
-    [SerializeField] bool award;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Simulates loading a profile/character named "Arno" from the Profile page, see SaveManager.cs. Currently uses premade save file
-        SaveManager.instance.LoadProfile();
+        // SaveManager.instance.NewProfile("Arno"); // Used to create a save file for testing purposes        
+        SaveManager.instance.LoadProfile("Arno"); // TODO - Implement "profile selection" screen to select a profile to load. Currently uses a premade save file "arno.json"
         player = SaveManager.instance.player;
-        playerName = player.playerName;
     }
 
     // Update is called once per frame
@@ -30,12 +24,16 @@ public class MainMenuController : MonoBehaviour
     {
     }
 
-    // Uses PlayerPrefs, consider reworking this with new save system
+    // Starts a gameplay session using a selected difficulty level
     public void StartGameplaySession(int difficulty)
     {
-        PlayerPrefs.SetString("playerName", playerName);
-        PlayerPrefs.SetInt("difficulty", difficulty);
+        SaveManager.instance.player.difficulty = difficulty;
         SceneManager.LoadScene("GameplaySession");
     }
 
+    // Exits game
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

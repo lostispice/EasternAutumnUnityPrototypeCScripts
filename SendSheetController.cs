@@ -4,13 +4,14 @@ public class SendSheetController : MonoBehaviour
 {
 
     // Handles new mail item animations, placeholer values
-    public bool newMailRequest = false;
-    public Vector2 destinationStart = new Vector2(-3, 6);
+    [SerializeField] bool newMailRequest = false;
+    // Item used to "move" into view using physics, replaced with a "teleportin" sheet as two objects moving on screen simultaneously can be disorientating
+    /*public Vector2 destinationStart = new Vector2(-3, 6);*/
     public Vector2 destinationNew = new Vector2(-3, -1);
 
     // Handles mail item being "sent off(screen)"
-    public bool sendMail = false;
-    public Vector2 destinationSend = new Vector2(100, 0);
+    [SerializeField] bool sendMail = false;
+    [SerializeField] Vector2 destinationSend = new Vector2(10, 0);
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +23,7 @@ public class SendSheetController : MonoBehaviour
     {
         if (newMailRequest)
         {
-            transform.position = Vector2.Lerp(transform.position, destinationNew, Time.deltaTime);
+            transform.position = destinationNew;
         }
         if (sendMail)
         {
@@ -34,7 +35,8 @@ public class SendSheetController : MonoBehaviour
     // Moves the object into the player's FOV
     public void NewMailRequested()
     {
-        transform.position = destinationStart;
+        // No longer required now that object "teleports" instead of moving
+        // transform.position = destinationStart;
         newMailRequest = true;
         sendMail = false;
     }

@@ -14,10 +14,10 @@ public class SaveFileHandler
         this.dataFileName = dataFileName;
     }
 
-    public PlayerProfile Load()
-    {
-        // TODO - This file name should be dynamic for different characters/profiles. Presently this uses a premade file
-        dataFileName = "Arno.json";
+    // Loads a profile using a player name + json (e.g. name.json)
+    public PlayerProfile Load(string player)
+    {        
+        dataFileName = player + ".json";
 
         // Uses Path.Combine for cross-OS compatibility
         string fullPath = Path.Combine(dataDirPath, dataFileName);
@@ -49,6 +49,7 @@ public class SaveFileHandler
     {
         // Sets save file name based on player character name
         dataFileName = player.playerName + ".json";
+
         // Uses Path.Combine for cross-OS compatibility
         string fullPath = Path.Combine(dataDirPath, dataFileName);
         try
