@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class ResultsController : MonoBehaviour, ISave
 {
-    // Gameplay session stats, imported from GameController.cs
+    // Player name
+    [SerializeField] string playerName;
+
+    // Gameplay session values
+    [SerializeField] int difficulty;
     [SerializeField] int score;
     [SerializeField] int lifeCount;
     [SerializeField] int targetMin;
@@ -37,6 +41,7 @@ public class ResultsController : MonoBehaviour, ISave
     // Start is called before the first frame update
     void Start()
     {
+        LoadProfile(SaveManager.instance.player);
         RetrieveValues();
         ResultCheckerTarget();
         PopulateReport();        
@@ -49,20 +54,24 @@ public class ResultsController : MonoBehaviour, ISave
     {
     }
 
-    // Saves player award progress (ISave)
+    // (ISave) Used for saving the player's award progress 
     public void SaveProfile(PlayerProfile player)
     {
-        SaveManager.instance.player.awards[SaveManager.instance.player.difficulty + "T"] = targetPass;
-        SaveManager.instance.player.awards[SaveManager.instance.player.difficulty + "A"] = awardPass;
-        SaveManager.instance.player.extraLives[SaveManager.instance.player.difficulty] = commendationPass;
+        player.awards[difficulty + "T"] = targetPass;
+        player.awards[difficulty + "A"] = awardPass;
+        player.extraLives[difficulty] = commendationPass;
     }
 
     // From ISave, not used in this script
-    public void LoadProfile(PlayerProfile player) { }
+    public void LoadProfile(PlayerProfile player) 
+    {
+        playerName = player.playerName;
+    }
 
     // Retrieve values from game session
     public void RetrieveValues()
     {
+        difficulty = PlayerPrefs.GetInt("difficulty");
         score = PlayerPrefs.GetInt("score");
         lifeCount = PlayerPrefs.GetInt("lifeCount");
         targetMin = PlayerPrefs.GetInt("targetMin");
@@ -99,7 +108,6 @@ public class ResultsController : MonoBehaviour, ISave
         {
             commendationPass = false;
         }
-
     }
 
     // Checks if player met their Award gameplay target,
@@ -118,8 +126,8 @@ public class ResultsController : MonoBehaviour, ISave
     // Populates textboxes with gameplay statistics & results
     public void PopulateReport()
     {
-        playerHeader.text = "Staff Report: " + SaveManager.instance.player.playerName;
-        playerSubHeader.text = SaveManager.instance.player.playerName + ": ";
+        playerHeader.text = "Staff Report: " + playerName;
+        playerSubHeader.text = playerName + ": ";
         playerScore.text = score.ToString();
         targetMinText.text = targetMin.ToString();
         targetCommText.text = targetComm.ToString();

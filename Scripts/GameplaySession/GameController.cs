@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviour, ISave
 {
-    // TODO - Used in messages panel, set by SaveManger.instance.player.playerName.
-    //[SerializeField] string playerName;
+    // Difficulty level for this game session
+    [SerializeField] int difficulty;
 
     // Gameplay Targets. TODO - Write a method that sets targets based on difficulty/session id.
     // TODO - Implement target modifier that can be adjusted in main menu
@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
 
     // Life-counter. TODO - Implement lifecount modifier that can be adjusted in main menu
     [SerializeField] int lifeCount;
+    [SerializeField] bool extraLife;
 
     // Used to manage the Messages (life counter) panel
     [SerializeField] GameObject buttonUnread;
@@ -55,7 +56,9 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ResetValues();
+        difficulty = PlayerPrefs.GetInt("difficulty");
+        LoadProfile(SaveManager.instance.player);
+        SetValues();
         GeneratePlayset();
         SessionTargets();
     }
@@ -66,23 +69,53 @@ public class GameController : MonoBehaviour
         GameTimer();
     }
 
-    // Resets the gameplay counters to default values.
-    // TODO - Difficulty-dependant targets?
-    public void ResetValues()
+    // (ISave) Retrives extra lives data earned from the previous difficulty level
+    public void LoadProfile(PlayerProfile player)
+    {
+        try
+        {
+            extraLife = player.extraLives[difficulty-1];
+        }
+        catch // Extra lives do not apply on easy difficulty for story & gameplay purposes
+        {
+            extraLife = false;
+        }
+    }
+
+    // (ISave) Not used on this screen, changes are applied in the Results screen. 
+    public void SaveProfile(PlayerProfile player) { }
+
+    // Resets the gameplay counters to default values. Additonal code could be implemented to make these targets difficulty-dependant.
+    public void SetValues()
     {
         targetMin = 5;
         targetComm = 10;
         targetAward = 20;
-        lifeCount = 3;
         score = 0;
+        SetLifeCounter(extraLife);
+    }
+
+    // Determines how many lives the player has in this gameplay session. Default is 3.
+    public void SetLifeCounter(bool extraLives)
+    {
+        if (extraLives)
+        {
+            lifeCount = 4;
+            // Updates the life messages to inform the player of their extra life
+            messageCount++;
+            lifeMessages.text = messageCount + ". Commendation previously earned.";
+            firstMessage = false;
+        }
+        else
+        {
+            lifeCount = 3;
+        }
     }
 
     // Generates the level's country playset, using 1996 city names. Special non-latin characters simplified to latin characters.
     // Non-Soviet dissolution/reunification nations like East Germany, Czechoslovakia & Yugoslavia are omitted for gameplay simplicity. Could be introduced in later versions.
     public void GeneratePlayset()
     {
-        // Import settings from main menu
-        // difficulty = PlayerPrefs.GetInt("difficulty");
         nations.Add(1, new List<string> { "Tirana", "Durres", "Vlore" });                   // Albania
         nations.Add(2, new List<string> { "Sofia", "Plovdiv", "Varna" });                   // Bulgaria
         nations.Add(3, new List<string> { "Budapest", "Debrecen", "Miskolc" });             // Hungary
@@ -117,13 +150,14 @@ public class GameController : MonoBehaviour
     public void NewMailRequested()
     {
         countryRandomiser();
+        // Generates a random PO box number
         mailAddress.text = "To: PO Box #" + Random.Range(1, 1000) + "\n" + AddressGenerator();
     }
 
-    // Randomised generation of the mail item's address
+    // Generates a random mail item's address, the challenge value is then checked against the player's answer
     public void countryRandomiser()
     {
-        if (SaveManager.instance.player.difficulty == 0)
+        if (difficulty == 0)
         {
             // Lowest difficulty [0] only uses countries #1 - 6
             challenge = Random.Range(1, 7);
@@ -138,14 +172,14 @@ public class GameController : MonoBehaviour
     public string AddressGenerator()
     {
         // Diifficulty determines how many cities are generated per nation. [0 & 1] = 1, [2] = 2, [3] = 3
-        if (SaveManager.instance.player.difficulty == 0)
+        if (difficulty == 0)
         {
             return nations[challenge][0];
 
         }
         else
         {
-            return nations[challenge][SaveManager.instance.player.difficulty - 1];
+            return nations[challenge][difficulty - 1];
         }
         
     }
@@ -173,11 +207,11 @@ public class GameController : MonoBehaviour
     // Called when the player gives an incorrect answer
     public void WrongAnswer()
     {
-        // Changes button from "read" to "unread". Could also introduce an alert sound trigger here.
+        // Changes button from "read" to "unread". An alert sound trigger could also be inserted here.
         buttonRead.SetActive(false);
         buttonUnread.SetActive(true);
 
-        // Deducts 1 life, adds to the messages counter
+        // Deducts 1 life, adds to the penalty messages counter
         lifeCount--;
         messageCount++;
         if (firstMessage)
