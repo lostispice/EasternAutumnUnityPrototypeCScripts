@@ -51,12 +51,21 @@ public class ProfileSelectController : MonoBehaviour, ISave
         LoadProfile(SaveManager.instance.player);
     }
         
-    // Creates a blank "default" profile and overwrites the old one. Resets the playerName input box
+    // Creates a blank "default" profile and overwrites the old one.
     public void ResetProfile()
     {
         SaveManager.instance.NewProfile();
         SaveManager.instance.SaveProfile();
-        playerName.text = "Arno"; // Default name
+        ResetOptions();
+    }
+
+    // Resets gameplay options to default
+    public void ResetOptions()
+    {
+        AudioListener.volume = 1.0f;
+        PlayerPrefs.SetInt("timerModifier", 60);
+        PlayerPrefs.SetInt("targetModifier", 5);
+        PlayerPrefs.SetInt("livesModifier", 3);
     }
 
     // Saves any changes to the player's name and loads the main menu

@@ -11,7 +11,6 @@ public class GameController : MonoBehaviour, ISave
     [SerializeField] int difficulty;
 
     // Gameplay Targets. TODO - Write a method that sets targets based on difficulty/session id.
-    // TODO - Implement target modifier that can be adjusted in main menu
     [SerializeField] int targetMin;
     [SerializeField] int targetComm;
     [SerializeField] int targetAward;
@@ -24,6 +23,10 @@ public class GameController : MonoBehaviour, ISave
 
     // Used to generate country playset for the given difficulty level
     [SerializeField] IDictionary<int, List<string>> nations = new Dictionary<int, List<string>>();
+
+    // Used to set which nations togglebox set is visible
+    [SerializeField] GameObject receiverSimple;
+    [SerializeField] GameObject receiverFull;
 
     // UI text written on mail item
     [SerializeField] TextMeshProUGUI mailAddress;
@@ -40,13 +43,13 @@ public class GameController : MonoBehaviour, ISave
     [SerializeField] GameObject buttonUnread;
     [SerializeField] GameObject buttonRead;
     [SerializeField] TextMeshProUGUI lifeMessages;
-    [SerializeField] bool firstMessage = true;
+    [SerializeField] bool firstMessage;
     [SerializeField] int messageCount;
 
     // Timer value, measured in seconds.
     // TODO - Implement lifecount modifier that can be adjusted in main menu. Consider raising the timer value for higher difficulties
-    [SerializeField] float countdownTimer = 60;
-    [SerializeField] bool pauseTimer = true;
+    [SerializeField] float countdownTimer;
+    [SerializeField] bool pauseTimer;
 
     // Used to end the game session
     [SerializeField] GameObject gameplayUI;
@@ -56,10 +59,9 @@ public class GameController : MonoBehaviour, ISave
     // Start is called before the first frame update
     void Start()
     {
-        difficulty = PlayerPrefs.GetInt("difficulty");
-        LoadProfile(SaveManager.instance.player);
         SetValues();
         GeneratePlayset();
+        TogglePlayset();
         SessionTargets();
     }
 
@@ -85,35 +87,44 @@ public class GameController : MonoBehaviour, ISave
     // (ISave) Not used on this screen, changes are applied in the Results screen. 
     public void SaveProfile(PlayerProfile player) { }
 
-    // Resets the gameplay counters to default values. Additonal code could be implemented to make these targets difficulty-dependant.
+    // Sets the gameplay counter values.
     public void SetValues()
     {
-        targetMin = 5;
-        targetComm = 10;
-        targetAward = 20;
+        pauseTimer = true;
+        firstMessage = true;
+        difficulty = PlayerPrefs.GetInt("difficulty");
+        countdownTimer = PlayerPrefs.GetInt("timerModifier");
         score = 0;
+        SetTargets();
+        LoadProfile(SaveManager.instance.player);
         SetLifeCounter(extraLife);
+    }
+
+    // Sets the gameplay target values.
+    public void SetTargets()
+    {
+        targetMin = PlayerPrefs.GetInt("targetModifier");
+        targetComm = targetMin * 2;
+        targetAward = targetMin * 4;
     }
 
     // Determines how many lives the player has in this gameplay session. Default is 3.
     public void SetLifeCounter(bool extraLives)
     {
+        lifeCount = PlayerPrefs.GetInt("livesModifier");
         if (extraLives)
         {
-            lifeCount = 4;
+            lifeCount++;
             // Updates the life messages to inform the player of their extra life
             messageCount++;
             lifeMessages.text = messageCount + ". Commendation previously earned.";
             firstMessage = false;
         }
-        else
-        {
-            lifeCount = 3;
-        }
     }
 
     // Generates the level's country playset, using 1996 city names. Special non-latin characters simplified to latin characters.
     // Non-Soviet dissolution/reunification nations like East Germany, Czechoslovakia & Yugoslavia are omitted for gameplay simplicity. Could be introduced in later versions.
+    // Future versions can load these values from an external config file
     public void GeneratePlayset()
     {
         nations.Add(1, new List<string> { "Tirana", "Durres", "Vlore" });                   // Albania
@@ -138,6 +149,19 @@ public class GameController : MonoBehaviour, ISave
         nations.Add(20, new List<string> { "Tashkent", "Samarkand", "Namangan" });          // Uzbekistan
     }
 
+    // Displays either the full or simplified nations togglebox set
+    public void TogglePlayset()
+    {
+        if (difficulty == 0)
+        {
+            receiverSimple.gameObject.SetActive(true);
+        }
+        else
+        {
+            receiverFull.gameObject.SetActive(true);
+        }
+    }
+
     // Populates the target sheet
     public void SessionTargets()
     {
@@ -149,18 +173,18 @@ public class GameController : MonoBehaviour, ISave
     // Generates a new mail item
     public void NewMailRequested()
     {
-        countryRandomiser();
+        CountryRandomiser();
         // Generates a random PO box number
         mailAddress.text = "To: PO Box #" + Random.Range(1, 1000) + "\n" + AddressGenerator();
     }
 
     // Generates a random mail item's address, the challenge value is then checked against the player's answer
-    public void countryRandomiser()
+    public void CountryRandomiser()
     {
         if (difficulty == 0)
         {
-            // Lowest difficulty [0] only uses countries #1 - 6
-            challenge = Random.Range(1, 7);
+            // Lowest difficulty [0] only uses countries #1 - 5
+            challenge = Random.Range(1, 6);
         }
         else
         {

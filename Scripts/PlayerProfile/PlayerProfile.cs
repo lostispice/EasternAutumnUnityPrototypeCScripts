@@ -10,7 +10,9 @@ public class PlayerProfile
     public SerializableDictionary<string, bool> awards;
     public SerializableDictionary<int, bool> extraLives;
 
-    // Constructor
+    /*
+     *  Constructor
+     */
     public PlayerProfile()
     {
         this.playerName = "Arno"; // Default player name

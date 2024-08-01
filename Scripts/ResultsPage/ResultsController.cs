@@ -23,6 +23,7 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] bool awardPass;
 
     // Textboxes to be updated on the report sheet
+    [SerializeField] TextMeshProUGUI dateText;
     [SerializeField] TextMeshProUGUI playerHeader;
     [SerializeField] TextMeshProUGUI playerSubHeader;
     [SerializeField] TextMeshProUGUI playerScore;
@@ -36,6 +37,10 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] GameObject commMarkFail;
     [SerializeField] GameObject awardMarkPass;
     [SerializeField] GameObject awardMarkFail;
+
+    // New gameplay sessions buttons
+    [SerializeField] GameObject retryLevel;
+    [SerializeField] GameObject nextLevel;
 
 
     // Start is called before the first frame update
@@ -62,7 +67,7 @@ public class ResultsController : MonoBehaviour, ISave
         player.extraLives[difficulty] = commendationPass;
     }
 
-    // From ISave, not used in this script
+    // (ISave) Used for retreiving the player's name
     public void LoadProfile(PlayerProfile player) 
     {
         playerName = player.playerName;
@@ -85,6 +90,7 @@ public class ResultsController : MonoBehaviour, ISave
         if (score >= targetMin && lifeCount > 0)
         {
             targetPass = true;
+            NextButtonVisiblity();
             // checks secondary objectives
             ResultCheckerCommendation();
             ResultCheckerAward();
@@ -92,8 +98,18 @@ public class ResultsController : MonoBehaviour, ISave
         else 
         { 
             targetPass = false;
+            retryLevel.gameObject.SetActive(true);
             commendationPass = false;
             awardPass = false;
+        }
+    }
+
+    // Prevents the Next Level button from appearing if the player is already at the last level
+    public void NextButtonVisiblity()
+    {
+        if (difficulty < 3)
+        {
+            nextLevel.gameObject.SetActive(true);
         }
     }
 
@@ -128,6 +144,7 @@ public class ResultsController : MonoBehaviour, ISave
     {
         playerHeader.text = "Staff Report: " + playerName;
         playerSubHeader.text = playerName + ": ";
+        DifficultyDate();
         playerScore.text = score.ToString();
         targetMinText.text = targetMin.ToString();
         targetCommText.text = targetComm.ToString();
@@ -135,6 +152,26 @@ public class ResultsController : MonoBehaviour, ISave
         MarkCommendation();
         MarkAward();
         ResultRemarks();
+    }
+
+    public void DifficultyDate()
+    {
+        if (difficulty == 0)
+        {
+            dateText.text = "1989";
+        }
+        if (difficulty == 1)
+        {
+            dateText.text = "1992";
+        }
+        if (difficulty == 2)
+        {
+            dateText.text = "1994";
+        }
+        if (difficulty == 3)
+        {
+            dateText.text = "1996";
+        }
     }
 
     // Checks which symbol (tick/cross) should be displayed for commendation
@@ -199,6 +236,13 @@ public class ResultsController : MonoBehaviour, ISave
 
     public void RetrySession()
     {
+        SceneManager.LoadScene("GameplaySession");
+    }
+
+    public void NextLevel()
+    {
+        difficulty++;
+        PlayerPrefs.SetInt("difficulty", difficulty);
         SceneManager.LoadScene("GameplaySession");
     }
 }

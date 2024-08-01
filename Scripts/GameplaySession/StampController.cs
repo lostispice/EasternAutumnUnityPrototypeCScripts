@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class StampController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {        
-    }
 
     // Resets the flag stamp on the mail item
     public void ResetStamp()

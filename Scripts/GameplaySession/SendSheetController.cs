@@ -5,7 +5,7 @@ public class SendSheetController : MonoBehaviour
 
     // Handles new mail item animations, placeholer values
     [SerializeField] bool newMailRequest = false;
-    // Item used to "move" into view using physics, replaced with a "teleportin" sheet as two objects moving on screen simultaneously can be disorientating
+    // Item used to "move" into view using physics, replaced with a "teleporting" sheet as two objects moving on screen simultaneously can be disorientating
     /*public Vector2 destinationStart = new Vector2(-3, 6);*/
     public Vector2 destinationNew = new Vector2(-3, -1);
 
