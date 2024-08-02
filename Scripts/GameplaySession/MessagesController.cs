@@ -1,38 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-// Life-System messages are controlled by GameController.cs, this only manages the "boss message" panel
+/// <summary>
+/// This script handles the "management messages" in the messages panel, used to inform the player of current events and the rules for the current session.
+/// It is loaded alongside GameController.cs, MessagesController.cs, MailController.cs and SendSheetController.cs.
+/// Note that Life-System messages are controlled by GameController.cs directly.
+/// </summary>
 public class MessagesController : MonoBehaviour, ISave
 {
     [SerializeField] string playerName;
     [SerializeField] int difficulty;
     [SerializeField] TextMeshProUGUI bossPanel;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Unity calls this method automatically when the GameSession screen is first loaded.
+    /// </summary>
     void Start()
     {
         LoadProfile(SaveManager.instance.player);
         PopulateLetterPanel();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    // Retrieves the player data (ISave)
+    /// <summary>
+    /// Retrieves the player's name.
+    /// Uses the ISave interface.
+    /// </summary>
+    /// <param name="player"></param>
     public void LoadProfile(PlayerProfile player)
     {
         // Player name
         playerName = player.playerName;
     }
 
-    // Not used on this screen, changes are applied in the Results screen (ISave)
+    /// <summary>
+    /// Not used on this screen, changes are applied in the Results screen.
+    /// Part of ISave interface. Prevents CS0535 error in VStudio.
+    /// </summary>
+    /// <param name="player"></param>
     public void SaveProfile(PlayerProfile player) { }
 
-    // Populates the Boss messages panel according to difficulty level
+    /// <summary>
+    /// Populates the Boss messages panel according to difficulty level.
+    /// </summary>
     void PopulateLetterPanel()
     {
         bossPanel.text = "To: " + playerName + "\n\n";
@@ -46,7 +55,7 @@ public class MessagesController : MonoBehaviour, ISave
             bossPanel.text += "Your predecessor, Old Man Pekka, has told me that he's left his old cheat sheet behind for your reference. Use it but don't rely on it, there are only so many minutes in a day that you should be spending working not reading. \n\n";
             bossPanel.text += "Work fast, work efficiently and don't make mistakes. We've already lost the DDR, Czechoslovakia and Yugoslavia to our rival in Switzerland, and we don't need to lose any more. \n\n";
             bossPanel.text += "Good luck. \n\n";
-            bossPanel.text += "PS: You may have heard in the news that there's been some unrest and protests lately in Eastern Europe. A few flags might change but as far as you should be concerned, your job should stay the same for the foreseeable future. Moscow has suspended all mail services for the Soviet Union outside of Moscow oblast, but we should expect things to return to normal eventually. \n\n";
+            bossPanel.text += "PS: You may have heard in the news that there's been some unrest and protests lately in Eastern Europe. A few flags might change but as far as you should be concerned, your job should stay the same for the foreseeable future. Moscow has temporarily suspended all mail services for the Soviet Union, but we should expect things to return to normal eventually. \n\n";
         }
         else if (difficulty == 1) // Medium
         {

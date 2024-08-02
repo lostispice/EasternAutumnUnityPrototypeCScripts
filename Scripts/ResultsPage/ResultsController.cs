@@ -1,15 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This script handles all functionality within the Results screen.
+/// </summary>
 public class ResultsController : MonoBehaviour, ISave
 {
-    // Player name
+    /// <summary>
+    /// This variable holds the player's name.
+    /// </summary>
     [SerializeField] string playerName;
 
-    // Gameplay session values
+    /// <summary>
+    /// These variables hold the Gameplay session values
+    /// </summary>
     [SerializeField] int difficulty;
     [SerializeField] int score;
     [SerializeField] int lifeCount;
@@ -17,12 +22,16 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] int targetComm;
     [SerializeField] int targetAward;
 
-    // Determines if player passed (1) or failed (0) their respective objectives
+    /// <summary>
+    /// These variables are used to determines if player passed (true) or failed (false) their respective objectives
+    /// </summary>
     [SerializeField] bool targetPass;
     [SerializeField] bool commendationPass;
     [SerializeField] bool awardPass;
 
-    // Textboxes to be updated on the report sheet
+    /// <summary>
+    /// These variables are the textboxes on the report sheet to be updated by the script
+    /// </summary>
     [SerializeField] TextMeshProUGUI dateText;
     [SerializeField] TextMeshProUGUI playerHeader;
     [SerializeField] TextMeshProUGUI playerSubHeader;
@@ -32,18 +41,25 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] TextMeshProUGUI targetAwardText;
     [SerializeField] TextMeshProUGUI remarksText;
 
-    // Cross/Tick symbols used to report if player has met target, .SetActive(true);
+    /// <summary>
+    /// These variables are Cross/Tick symbols used to report if player has met their respective targets
+    /// </summary>
     [SerializeField] GameObject commMarkPass;
     [SerializeField] GameObject commMarkFail;
     [SerializeField] GameObject awardMarkPass;
     [SerializeField] GameObject awardMarkFail;
 
-    // New gameplay sessions buttons
+    /// <summary>
+    /// These variables are buttons used to start new gameplay sessions
+    /// </summary>
     [SerializeField] GameObject retryLevel;
     [SerializeField] GameObject nextLevel;
 
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Unity calls this method automatically when the Results screen is first loaded.
+    /// These methods populate the contents of the results "page", including which buttons or objects are visible
+    /// </summary>
     void Start()
     {
         LoadProfile(SaveManager.instance.player);
@@ -54,12 +70,11 @@ public class ResultsController : MonoBehaviour, ISave
         SaveManager.instance.SaveProfile(); // Saves profile changes to JSON save file
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    // (ISave) Used for saving the player's award progress 
+    /// <summary>
+    /// Saves the player's award progress to their profile.
+    /// Uses the ISave interface.
+    /// </summary>
+    /// <param name="player"></param>
     public void SaveProfile(PlayerProfile player)
     {
         player.awards[difficulty + "T"] = targetPass;
@@ -67,13 +82,19 @@ public class ResultsController : MonoBehaviour, ISave
         player.extraLives[difficulty] = commendationPass;
     }
 
-    // (ISave) Used for retreiving the player's name
+    /// <summary>
+    /// Retreives the player's name from their profile.
+    /// Uses the ISave interface.
+    /// </summary>
+    /// <param name="player"></param>
     public void LoadProfile(PlayerProfile player) 
     {
         playerName = player.playerName;
     }
 
-    // Retrieve values from game session
+    /// <summary>
+    /// Retrieve values from game session.
+    /// </summary>
     public void RetrieveValues()
     {
         difficulty = PlayerPrefs.GetInt("difficulty");
@@ -84,15 +105,17 @@ public class ResultsController : MonoBehaviour, ISave
         targetAward = PlayerPrefs.GetInt("targetAward");
     }
 
-    // Determines if the player passed or failed the session overall
+    /// <summary>
+    /// Determines if the player passed or failed the session overall.
+    /// This determines which messages and buttons are displayed to the player.
+    /// </summary>
     public void ResultCheckerTarget()
     {
         if (score >= targetMin && lifeCount > 0)
         {
             targetPass = true;
             NextButtonVisiblity();
-            // checks secondary objectives
-            ResultCheckerCommendation();
+            ResultCheckerCommendation(); // Checks secondary objectives
             ResultCheckerAward();
         }
         else 
@@ -104,7 +127,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Prevents the Next Level button from appearing if the player is already at the last level
+    /// <summary>
+    /// Prevents the Next Level button from appearing if the player is already at the final level (i.e. highest difficulty)
+    /// </summary>
     public void NextButtonVisiblity()
     {
         if (difficulty < 3)
@@ -113,7 +138,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Checks if player met their Commendation gameplay target,
+    /// <summary>
+    /// Checks if the player has met their Commendation gameplay target.
+    /// </summary>
     public void ResultCheckerCommendation()
     {
         if (score >= targetComm)
@@ -126,7 +153,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Checks if player met their Award gameplay target,
+    /// <summary>
+    /// Checks if player has met their Award gameplay target.
+    /// </summary>
     public void ResultCheckerAward()
     {
         if (score >= targetAward)
@@ -139,7 +168,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Populates textboxes with gameplay statistics & results
+    /// <summary>
+    /// Populates Results textboxes with gameplay statistics 
+    /// </summary>& results
     public void PopulateReport()
     {
         playerHeader.text = "Staff Report: " + playerName;
@@ -154,6 +185,10 @@ public class ResultsController : MonoBehaviour, ISave
         ResultRemarks();
     }
 
+    /// <summary>
+    /// Determines which gameplay date is shown.
+    /// This is dependent on the difficulty level.
+    /// </summary>
     public void DifficultyDate()
     {
         if (difficulty == 0)
@@ -174,7 +209,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Checks which symbol (tick/cross) should be displayed for commendation
+    /// <summary>
+    /// Checks which symbol (tick/cross) should be displayed for the commendation section.
+    /// </summary>
     public void MarkCommendation()
     {
         if (commendationPass)
@@ -189,7 +226,9 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Checks which symbol (tick/cross) should be displayed for award
+    /// <summary>
+    /// Checks which symbol (tick/cross) should be displayed for the award section.
+    /// </summary>
     public void MarkAward()
     {
         if (awardPass)
@@ -204,41 +243,51 @@ public class ResultsController : MonoBehaviour, ISave
         }
     }
 
-    // Populates the Remarks box with comments corresponding to the player's performance
+    /// <summary>
+    /// Populates the Remarks box with comments.
+    /// Comments are dependent on the player's performance.
+    /// </summary>
     public void ResultRemarks()
     {
         if (awardPass)
-        {
-            // Finnish - "Allís well that ends well!"
-            remarksText.text = SaveManager.instance.player.playerName + " has proven themselves to be an exemplary employee. \n Loppu hyvin, kaikki hyvin! - Karhu";
+        {            
+            remarksText.text = SaveManager.instance.player.playerName + " has proven themselves to be an exemplary employee. \n Loppu hyvin, kaikki hyvin! - Karhu"; // Finnish - "Allís well that ends well!"
         }
         else if (commendationPass)
-        {
-            // Finnish - "Slowly itíll go well."
-            remarksText.text = SaveManager.instance.player.playerName + " has exceeded expectations admirably. \n Hiljaa hyv‰ tulee. - Karhu";
+        {            
+            remarksText.text = SaveManager.instance.player.playerName + " has exceeded expectations admirably. \n Hiljaa hyv‰ tulee. - Karhu"; // Finnish - "Slowly itíll go well."
         }
         else if (targetPass)
-        {
-            // Finnish - "No one is born a smith."
-            remarksText.text = SaveManager.instance.player.playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole sepp‰ syntyess‰‰n. - Karhu";
+        {            
+            remarksText.text = SaveManager.instance.player.playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole sepp‰ syntyess‰‰n. - Karhu"; // Finnish - "No one is born a smith."
         }
         else
-        {
-            // Finnish - "Itís no use crying at the marketplace."
-            remarksText.text = SaveManager.instance.player.playerName + " appears unfit for this role and has been marked for termination. \n Ei auta itku markkinoilla. - Karhu";
+        {            
+            remarksText.text = SaveManager.instance.player.playerName + " appears unfit for this role and has been marked for termination. \n Ei auta itku markkinoilla. - Karhu"; // Finnish - "Itís no use crying at the marketplace."
         }
     }
 
+    /// <summary>
+    /// Returns to the MainMenu screen.
+    /// </summary>
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Returns to the GameplaySession screen.
+    /// Starts a game session under the same parameters (i.e. "retry").
+    /// </summary>
     public void RetrySession()
     {
         SceneManager.LoadScene("GameplaySession");
     }
 
+    /// <summary>
+    /// Returns to the GameplaySession screen.
+    /// Starts a game session at the next difficulty level.
+    /// </summary>
     public void NextLevel()
     {
         difficulty++;

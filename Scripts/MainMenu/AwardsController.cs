@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script handles the functionality of the Awards window within the Main Menu screen.
+/// It is loaded alongside MainMenuController.cs
+/// </summary>
 public class AwardsController : MonoBehaviour
 {
-    // Award badges, Not-Earned (x)
+    /// <summary>
+    /// These variables are "not-yet-earned" award badges
+    /// </summary>
     [SerializeField] GameObject xEasyT;
     [SerializeField] GameObject xEasyA;
     [SerializeField] GameObject xMedT;
@@ -14,7 +20,9 @@ public class AwardsController : MonoBehaviour
     [SerializeField] GameObject xExpT;
     [SerializeField] GameObject xExpA;
 
-    // Award badges, Earned
+    /// <summary>
+    /// These variables are earned award badges
+    /// </summary>
     [SerializeField] GameObject EasyT;
     [SerializeField] GameObject EasyA;
     [SerializeField] GameObject MedT;
@@ -24,23 +32,33 @@ public class AwardsController : MonoBehaviour
     [SerializeField] GameObject ExpT;
     [SerializeField] GameObject ExpA;
 
-    // Dictionary used to store the GameOjects
+    /// <summary>
+    /// These variables are used to store the award badge GameObjects into their respective categories
+    /// </summary>
     private Dictionary<string, GameObject> notEarnedAwards;
     private Dictionary<string, GameObject> earnedAwards;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Unity calls this method automatically when the MainMenu screen is first loaded.
+    /// </summary>
     void Start()
     {
         PopulateCheckerDictionaries();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Unity calls this method continuously, once per frame.
+    /// It ensures that the awards menu is up to date.
+    /// </summary>
     void Update()
     {
         AwardChecker();
     }
 
-    // Populates the checker dictionaries with GameObjects, corresponding to the PlayerProfile awards dictionary
+    /// <summary>
+    /// Populates the checker dictionaries with their respective GameObjects, this corresponds directly to the PlayerProfile awards dictionary.
+    /// Future versions could reference an external AwardsFramework config file.
+    /// </summary>
     void PopulateCheckerDictionaries()
     {
         notEarnedAwards = new Dictionary<string, GameObject>
@@ -68,7 +86,9 @@ public class AwardsController : MonoBehaviour
         };
     }
 
-    // Checks if the player has earned that award and displays the correct badge icon
+    /// <summary>
+    /// Checks if the player has earned that award and displays the correct badge icon accordingly.
+    /// </summary>
     void AwardChecker()
     {
         foreach (var award in SaveManager.instance.player.awards)

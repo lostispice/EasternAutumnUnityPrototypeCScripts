@@ -1,14 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+///  This script handles all functionality within the Main Menu screen, except for the awards window.
+///  It is loaded alongside AwardsController.cs
+/// </summary>
 public class MainMenuController : MonoBehaviour
 {
+    /// <summary>
+    /// These variables are used by the Options window.
+    /// </summary>
     [SerializeField] Slider volumeSlider;
     [SerializeField] TextMeshProUGUI volumeNum;
     [SerializeField] Slider timerSlider;
@@ -18,32 +22,44 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] Slider livesSlider;
     [SerializeField] TextMeshProUGUI livesNum;
 
+    /// <summary>
+    /// Unity calls this method automatically when the MainMenu screen is first loaded.
+    /// </summary>
     private void Start()
     {
         GetOptions();
         OptionsListener();
     }
 
-    // Starts a gameplay session using a selected difficulty level
+    /// <summary>
+    /// Starts a gameplay session using a selected difficulty level.
+    /// </summary>
+    /// <param name="difficulty"></param>
     public void StartGameplaySession(int difficulty)
     {
         PlayerPrefs.SetInt("difficulty", difficulty);
         SceneManager.LoadScene("GameplaySession");
     }
 
-    // Return to profile screen
+    /// <summary>
+    /// Returns to profile screen.
+    /// </summary>
     public void ReturnToProfile()
     {
         SceneManager.LoadScene("ProfileSelect");
     }
 
-    // Exits game
+    /// <summary>
+    /// Exits the game. SaveManager.cs will also save the player's data.
+    /// </summary>
     public void ExitGame()
     {
         Application.Quit();
     }
 
-    // Applies AddListener to all Options objects
+    /// <summary>
+    /// Applies AddListener to all Options sliders and updates the values in their associated textboxes.
+    /// </summary>
     public void OptionsListener()
     {
         volumeSlider.onValueChanged.AddListener((v) => {
@@ -60,7 +76,10 @@ public class MainMenuController : MonoBehaviour
         });
     }
 
-    // Fetches options values and updates sliders accordingly.
+    /// <summary>
+    /// Fetches any saved options values and updates sliders accordingly.
+    /// Future versions could retrieve Options data directly from a player-specific save file.
+    /// </summary>
     public void GetOptions()
     {
         volumeSlider.value = AudioListener.volume;
@@ -76,26 +95,32 @@ public class MainMenuController : MonoBehaviour
         }
         catch
         {
-            DefaultOptions();
+            DefaultOptions(); // Failsafe: if no saved options data exists, the game will load default values. Beware of infinite loops.
         }
     }
 
+    /// <summary>
+    /// Saves the current slider values in the Options window.
+    /// Future versions could save this directly to a player-specific save file.
+    /// </summary>
     public void SaveOptions()
-    {
-        // AudioListener is a static class and persistent across screens
-        AudioListener.volume = volumeSlider.value;
+    {        
+        AudioListener.volume = volumeSlider.value; // AudioListener is persistent across screens
         PlayerPrefs.SetInt("timerModifier", Convert.ToInt32(timerSlider.value));
         PlayerPrefs.SetInt("targetModifier", Convert.ToInt32(targetSlider.value));
         PlayerPrefs.SetInt("livesModifier", Convert.ToInt32(livesSlider.value));
     }
 
-    // Returns all Options values to default, re-displays the values
+    /// <summary>
+    /// Returns all Options values to default values.
+    /// Future versions could reference an OptionsDefault config file.
+    /// </summary>
     public void DefaultOptions()
     {
         AudioListener.volume = 1.0f;
         PlayerPrefs.SetInt("timerModifier", 60);
         PlayerPrefs.SetInt("targetModifier", 5);
         PlayerPrefs.SetInt("livesModifier", 3);
-        GetOptions();
+        GetOptions(); // Returns all sliders/textboxes to default valuse. Beware of infinite loops.
     }
 }
