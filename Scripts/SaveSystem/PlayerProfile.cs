@@ -1,8 +1,8 @@
-
 /// <summary>
-/// This class contains all long-term player data (including the player's name and any lives or awards earned) and is referenced throughout the game.
-/// The game saves an instance of this class as a JSON file to the player's local drive using SaveFileHandler.cs, which can later be retrieved for use.
-/// Future versions could include more data such as Options modifiers and unique player IDs for a multiple-slot save system.
+/// This class contains all long-term player data (i.e. the player's name and any lives or awards earned) and is referenced throughout the game.
+/// The game saves an instance of this class as a JSON file to the player's local drive using SaveFileHandler.cs, which can then be retrieved for use later.
+/// Future versions could include more player-specific data such as Options modifiers and unique player IDs for a multiple-slot save system.
+/// Futuremore, future versions could also make the class variables private or SerializedField with getters instead of using public variables.
 /// </summary>
 [System.Serializable]
 public class PlayerProfile

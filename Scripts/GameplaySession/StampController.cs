@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This script handles the modern flags displayed (stamped) on the mail item when the player selects and answer.
+/// This script handles the modern flags displayed (stamped) on the mail item when the player selects an answer.
 /// It is loaded alongside GameController.cs, MessagesController.cs, MailController.cs and SendSheetController.cs.
 /// When the player selects an answer nation, a modern-day flag appears on the mail item via Unity hooks.
 /// </summary>

@@ -1,19 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
-/// This script handles all primary functionality within the GameplaySession screen.
+/// This script manages all primary functionality within the GameplaySession screen.
 /// It is loaded alongside MailController.cs, MessagesController.cs, StampController.cs and SendSheetController.cs.
-/// Future versions could further divide this script's functionality into even more separate scripts.
+/// Future versions could further segregate this script's functionalities into even more separate scripts to enhance modularity.
 /// </summary>
 public class GameController : MonoBehaviour, ISave
 {
     /// <summary>
-    /// This variable defines the difficulty level for this game session
+    /// This variable defines the difficulty level for this game session.
     /// </summary>
     [SerializeField] int difficulty;
 
@@ -61,7 +59,7 @@ public class GameController : MonoBehaviour, ISave
     /// <summary>
     /// These variables are used by the game's life system.
     /// </summary>
-    [SerializeField] int lifeCount; // Note: *not* visible to player, this is to force the player to manually count/calculate their lives
+    [SerializeField] int lifeCount; // Note: *not* visible to player, game design intentionally requires the player to count/guess their remaining lives.
     [SerializeField] bool extraLife;
 
     /// <summary>
@@ -208,8 +206,8 @@ public class GameController : MonoBehaviour, ISave
     }
 
     /// <summary>
-    /// Determins which togglebox set is displayed.
-    /// Easy difficulty (0) will display a simplified list with Soviet SSRs removed as only Eastern bloc nations will appear in game.
+    /// Determines which togglebox set is displayed.
+    /// Easy difficulty (0) will display a simplified list with Soviet SSRs removed as only Eastern bloc nations will appear at that difficulty.
     /// </summary>
     public void TogglePlayset()
     {
@@ -245,7 +243,7 @@ public class GameController : MonoBehaviour, ISave
 
     /// <summary>
     /// Generates a random country (not shown the player) which is then used to generate a random city address.
-    /// The challenge value generated is also used to check the player's answer value.
+    /// The challenge value that is generated is also used to check the player's answer value.
     /// </summary>
     public void CountryRandomiser()
     {
@@ -311,7 +309,7 @@ public class GameController : MonoBehaviour, ISave
     /// <summary>
     /// Called when the player gives an incorrect answer.
     /// Reduces the player's life counter by 1, and displays a warning message in the messages panel.
-    /// Changes button from "read" to "unread". 
+    /// It also changes the Messages button status from "read" to "unread". 
     /// Future versions could also include an alert sound.
     /// </summary>
     public void WrongAnswer()
@@ -359,8 +357,8 @@ public class GameController : MonoBehaviour, ISave
     }
     
     /// <summary>
-    /// Toggles the gameplay timer on/off
-    /// It is called when the player presses "start" in the targets window at the beginning of the session to start the timer.
+    /// Toggles the gameplay timer on/off.
+    /// It is called when the player presses "start" in the targets window at the beginning of the session, starting the timer.
     /// It is also called when the player opens/closes the Quit Session window.
     /// </summary>
     public void StartStopTimer()

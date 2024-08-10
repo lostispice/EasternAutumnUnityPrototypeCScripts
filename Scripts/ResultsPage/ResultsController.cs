@@ -13,7 +13,7 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] string playerName;
 
     /// <summary>
-    /// These variables hold the Gameplay session values
+    /// These variables hold the Gameplay session values.
     /// </summary>
     [SerializeField] int difficulty;
     [SerializeField] int score;
@@ -23,14 +23,14 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] int targetAward;
 
     /// <summary>
-    /// These variables are used to determines if player passed (true) or failed (false) their respective objectives
+    /// These variables are used to determines if player passed (true) or failed (false) their respective objectives.
     /// </summary>
     [SerializeField] bool targetPass;
     [SerializeField] bool commendationPass;
     [SerializeField] bool awardPass;
 
     /// <summary>
-    /// These variables are the textboxes on the report sheet to be updated by the script
+    /// These variables are the textboxes on the report sheet to be updated by the script.
     /// </summary>
     [SerializeField] TextMeshProUGUI dateText;
     [SerializeField] TextMeshProUGUI playerHeader;
@@ -42,7 +42,7 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] TextMeshProUGUI remarksText;
 
     /// <summary>
-    /// These variables are Cross/Tick symbols used to report if player has met their respective targets
+    /// These variables are Cross/Tick symbols used to report whether the player has met their respective targets.
     /// </summary>
     [SerializeField] GameObject commMarkPass;
     [SerializeField] GameObject commMarkFail;
@@ -50,7 +50,7 @@ public class ResultsController : MonoBehaviour, ISave
     [SerializeField] GameObject awardMarkFail;
 
     /// <summary>
-    /// These variables are buttons used to start new gameplay sessions
+    /// These variables are buttons used to start new gameplay sessions.
     /// </summary>
     [SerializeField] GameObject retryLevel;
     [SerializeField] GameObject nextLevel;
@@ -58,7 +58,7 @@ public class ResultsController : MonoBehaviour, ISave
 
     /// <summary>
     /// Unity calls this method automatically when the Results screen is first loaded.
-    /// These methods populate the contents of the results "page", including which buttons or objects are visible
+    /// These methods populate the contents of the results "page", including which buttons or objects are visible.
     /// </summary>
     void Start()
     {
@@ -67,7 +67,7 @@ public class ResultsController : MonoBehaviour, ISave
         ResultCheckerTarget();
         PopulateReport();        
         SaveProfile(SaveManager.instance.player); // Saves results to the active player profile.        
-        SaveManager.instance.SaveProfile(); // Saves profile changes to JSON save file
+        SaveManager.instance.SaveProfile(); // Saves profile changes to JSON save file.
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public class ResultsController : MonoBehaviour, ISave
         {
             targetPass = true;
             NextButtonVisiblity();
-            ResultCheckerCommendation(); // Checks secondary objectives
+            ResultCheckerCommendation(); // Checks secondary objectives.
             ResultCheckerAward();
         }
         else 
@@ -128,7 +128,7 @@ public class ResultsController : MonoBehaviour, ISave
     }
 
     /// <summary>
-    /// Prevents the Next Level button from appearing if the player is already at the final level (i.e. highest difficulty)
+    /// Prevents the Next Level button from appearing if the player is already at the final level (i.e. highest difficulty).
     /// </summary>
     public void NextButtonVisiblity()
     {
@@ -169,7 +169,7 @@ public class ResultsController : MonoBehaviour, ISave
     }
 
     /// <summary>
-    /// Populates Results textboxes with gameplay statistics 
+    /// Populates the Results textboxes with gameplay statistics.
     /// </summary>& results
     public void PopulateReport()
     {
@@ -255,15 +255,15 @@ public class ResultsController : MonoBehaviour, ISave
         }
         else if (commendationPass)
         {            
-            remarksText.text = SaveManager.instance.player.playerName + " has exceeded expectations admirably. \n Hiljaa hyv‰ tulee. - Karhu"; // Finnish - "Slowly itíll go well."
+            remarksText.text = SaveManager.instance.player.playerName + " has exceeded expectations admirably. \n Hiljaa hyva tulee. - Karhu"; // Finnish - "Slowly itíll go well."
         }
         else if (targetPass)
         {            
-            remarksText.text = SaveManager.instance.player.playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole sepp‰ syntyess‰‰n. - Karhu"; // Finnish - "No one is born a smith."
+            remarksText.text = SaveManager.instance.player.playerName + " conducts their duties acceptably, if unremarkably. \n Ei kukaan ole seppa syntyessaan. - Karhu"; // Finnish - "No one is born a smith."
         }
         else
         {            
-            remarksText.text = SaveManager.instance.player.playerName + " appears unfit for this role and has been marked for termination. \n Ei auta itku markkinoilla. - Karhu"; // Finnish - "Itís no use crying at the marketplace."
+            remarksText.text = SaveManager.instance.player.playerName + " appears unfit for this role. \n Ei auta itku markkinoilla. - Karhu"; // Finnish - "Itís no use crying at the marketplace."
         }
     }
 
@@ -277,7 +277,7 @@ public class ResultsController : MonoBehaviour, ISave
 
     /// <summary>
     /// Returns to the GameplaySession screen.
-    /// Starts a game session under the same parameters (i.e. "retry").
+    /// Starts a game session under the same parameters (i.e. a "retry").
     /// </summary>
     public void RetrySession()
     {

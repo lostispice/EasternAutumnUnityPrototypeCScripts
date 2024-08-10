@@ -1,21 +1,21 @@
 using UnityEngine;
 
 /// <summary>
-/// This script handles movement of the mail item within the GameplaySession screen.
+/// This script manages the movement of the mail item within the GameplaySession screen.
 /// It is loaded alongside GameController.cs, MessagesController.cs, StampController.cs and SendSheetController.cs.
-/// Physics are used to simulate the mail item "arriving" on the player's desk (on-screen) and "leaving" the player's desk (off-screen).
+/// Unity physics are used to simulate a mail item "landing" on the player's desk (on-screen) and "flying-off" the player's desk (off-screen).
 /// </summary>
 public class MailController : MonoBehaviour
 {
     /// <summary>
-    /// These variables are used for "new mail item" animations
+    /// These variables are used for "new mail item" animations.
     /// </summary>
     [SerializeField] bool newMailRequest = false;
     [SerializeField] Vector2 destinationStart = new Vector2(-10, 0);
     [SerializeField] Vector2 destinationNew = new Vector2(0, 0);
 
     /// <summary>
-    /// These variables are used for "send mail item" animations
+    /// These variables are used for "send mail item" animations.
     /// </summary>
     [SerializeField] bool sendMail = false;
     [SerializeField] Vector2 destinationSend = new Vector2(100, 0);
@@ -37,7 +37,7 @@ public class MailController : MonoBehaviour
     }
 
     /// <summary>
-    /// Moves the mail item into the player's FOV
+    /// Moves the mail item into the player's FOV.
     /// </summary>
     public void NewMailRequested()
     {
@@ -47,7 +47,7 @@ public class MailController : MonoBehaviour
     }
 
     /// <summary>
-    /// Sends the mail item offscreen, beyond the player's FOV
+    /// Sends the mail item offscreen, beyond the player's FOV.
     /// </summary>
     public void SendMailOut()
     {

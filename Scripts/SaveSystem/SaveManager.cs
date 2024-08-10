@@ -3,8 +3,8 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// This script handles the save system used throughout the game, including saving and retrieving data from the current active profile.
-/// The Singleton pattern is used so that only a single instance exists and is accessed globally throughout the game.
+/// This script manages the save system used throughout the game, including saving and retrieving data from the current active profile.
+/// The Singleton pattern is used so that only a single instance exists, and accessed globally throughout the game.
 /// It is loaded alongside ProfileSelectController.cs when the ProfileSelect screen is loaded.
 /// </summary>
 public class SaveManager : MonoBehaviour
@@ -49,7 +49,7 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     void Start()
     {        
-        this.saveFileHandler = new SaveFileHandler(Application.persistentDataPath, fileName); // Uses a Unity property to determine the directory for saving data
+        this.saveFileHandler = new SaveFileHandler(Application.persistentDataPath, fileName); // Uses a Unity property to determine the directory for saving data.
         this.saveObjects = FindAllSaveObjects();
     }
 
@@ -73,7 +73,7 @@ public class SaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads data and updates all scripts that use the ISave interface
+    /// Loads data and updates all scripts that use the ISave interface.
     /// </summary>
     public void LoadProfile()
     {
@@ -86,7 +86,7 @@ public class SaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Saves data and updates all scripts that use the ISave interface
+    /// Saves data and updates all scripts that use the ISave interface.
     /// </summary>
     public void SaveProfile()
     {

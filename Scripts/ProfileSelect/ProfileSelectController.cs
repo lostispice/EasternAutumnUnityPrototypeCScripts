@@ -3,14 +3,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// This script handles all functionality within the ProfileSelect screen.
+/// This script manages functionality within the ProfileSelect screen.
 /// It is loaded alongside SaveManager.cs and interacts with it.
 /// </summary>
 public class ProfileSelectController : MonoBehaviour, ISave
 {
     /// <summary>
     /// This variable handles the Player Name textbox displayed to the player.
-    /// It is both used to display the currently saved name and to allow the user to key in a new name.
+    /// It is used to display the current player name retrieved from the save file (if any) and allows the user to key-in a new name.
     /// </summary>
     [SerializeField] TMP_InputField playerName;
 
@@ -34,6 +34,7 @@ public class ProfileSelectController : MonoBehaviour, ISave
         catch
         {
             SaveManager.instance.NewProfile();
+            ResetOptions();
         }
         LoadProfile(SaveManager.instance.player);
     }
@@ -97,45 +98,3 @@ public class ProfileSelectController : MonoBehaviour, ISave
         SceneManager.LoadScene("MainMenu");
     }
 }
-
-/*
- * // TODO - Implement multiple save profiles system
-public class ProfileSelectController : MonoBehaviour
-{
-    [SerializeField] SaveSlot[] saveSlots;
-    [SerializeField] TextMeshProUGUI activePlayerName;
-
-    private void Awake()
-    {
-        saveSlots = this.GetComponentsInChildren<SaveSlot>();
-    }
-
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-        LoadProfiles();
-    }
-
-    public void LoadProfiles()
-    {
-        // Load all saved profiles
-        Dictionary<string, PlayerProfile> savedPlayers = SaveManager.instance.RetrievePlayerProfiles();
-
-        // Loop through all four slots and update their values
-        foreach (SaveSlot saveSlot in saveSlots)
-        {
-            PlayerProfile player = null;
-            savedPlayers.TryGetValue(saveSlot.profileID, out player);
-            saveSlot.ProfileChecker(player);
-        }
-    }
-
-    public void UpdateActiveName()
-    {
-        this.activePlayerName.text = SaveManager.instance.player.playerName;
-    }
-
-}*/

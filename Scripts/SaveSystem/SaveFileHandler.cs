@@ -2,7 +2,7 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// This script is used to handle saving player profile data to the local disk.
+/// This script is used to manage saving player profile data to the local disk.
 /// It is also used when loading player profile data from the local disk, if a JSON save file exists in the save directory location.
 /// Future versions could support a multiple-slot save system under player-specific save names.
 /// An instance of this script is automatically created by SaveManager.cs when the ProfileSelect screen is first loaded.

@@ -1,15 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This script handles the functionality of the Awards window within the Main Menu screen.
+/// This script manages the functionality of the Awards window, within the Main Menu screen.
 /// It is loaded alongside MainMenuController.cs
 /// </summary>
 public class AwardsController : MonoBehaviour
 {
     /// <summary>
-    /// These variables are "not-yet-earned" award badges
+    /// These variables are "not-yet-earned" award badges.
     /// </summary>
     [SerializeField] GameObject xEasyT;
     [SerializeField] GameObject xEasyA;
@@ -21,7 +20,7 @@ public class AwardsController : MonoBehaviour
     [SerializeField] GameObject xExpA;
 
     /// <summary>
-    /// These variables are earned award badges
+    /// These variables are earned award badges.
     /// </summary>
     [SerializeField] GameObject EasyT;
     [SerializeField] GameObject EasyA;
@@ -33,7 +32,7 @@ public class AwardsController : MonoBehaviour
     [SerializeField] GameObject ExpA;
 
     /// <summary>
-    /// These variables are used to store the award badge GameObjects into their respective categories
+    /// These variables are used to store the award badge GameObjects into their respective categories.
     /// </summary>
     private Dictionary<string, GameObject> notEarnedAwards;
     private Dictionary<string, GameObject> earnedAwards;
@@ -48,7 +47,7 @@ public class AwardsController : MonoBehaviour
 
     /// <summary>
     /// Unity calls this method continuously, once per frame.
-    /// It ensures that the awards menu is up to date.
+    /// It ensures that the awards menu is up to date with the player's progress.
     /// </summary>
     void Update()
     {

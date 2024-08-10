@@ -7,13 +7,13 @@ using UnityEngine;
 public class SendSheetController : MonoBehaviour
 {
     /// <summary>
-    /// These variables are used for the "new mail item" animations
+    /// These variables are used for the "new mail item" animation.
     /// </summary>
     [SerializeField] bool newMailRequest = false;
     public Vector2 destinationNew = new Vector2(-3, -1);
 
     /// <summary>
-    /// These variables are used for "send mail item" animations
+    /// These variables are used for the "send mail item" animation.
     /// </summary>
     [SerializeField] bool sendMail = false;
     [SerializeField] Vector2 destinationSend = new Vector2(10, 0);
@@ -36,7 +36,7 @@ public class SendSheetController : MonoBehaviour
 
     /// <summary>
     /// Moves the sheet into the player's FOV.
-    /// Originally, this was designed to move into view using physics (like the mail item) however this simultenous movement created a disorientating effect.
+    /// Originally, this was designed to move into view using physics (like the mail item) however this simultaneous movement created a disorientating effect.
     /// In this version, the send sheet simply "teleports" to the required position.
     /// </summary>
     public void NewMailRequested()
@@ -46,7 +46,7 @@ public class SendSheetController : MonoBehaviour
     }
 
     /// <summary>
-    /// Sends the sheet offscreen beyond the player's FOV
+    /// Sends the sheet offscreen beyond the player's FOV using Unity physics.
     /// </summary>
     public void SendMailOut()
     {

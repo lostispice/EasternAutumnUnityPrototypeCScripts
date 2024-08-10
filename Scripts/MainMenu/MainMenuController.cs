@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-///  This script handles all functionality within the Main Menu screen, except for the awards window.
+///  This script manages non-awards functionality within the Main Menu screen.
 ///  It is loaded alongside AwardsController.cs
 /// </summary>
 public class MainMenuController : MonoBehaviour
@@ -59,6 +59,7 @@ public class MainMenuController : MonoBehaviour
 
     /// <summary>
     /// Applies AddListener to all Options sliders and updates the values in their associated textboxes.
+    /// AddListener allows Unity to process input from settings sliders.
     /// </summary>
     public void OptionsListener()
     {
@@ -77,7 +78,7 @@ public class MainMenuController : MonoBehaviour
     }
 
     /// <summary>
-    /// Fetches any saved options values and updates sliders accordingly.
+    /// Fetches any saved options values and updates sliders & text accordingly.
     /// Future versions could retrieve Options data directly from a player-specific save file.
     /// </summary>
     public void GetOptions()
@@ -105,7 +106,7 @@ public class MainMenuController : MonoBehaviour
     /// </summary>
     public void SaveOptions()
     {        
-        AudioListener.volume = volumeSlider.value; // AudioListener is persistent across screens
+        AudioListener.volume = volumeSlider.value; // AudioListener is global (persistent across screens)
         PlayerPrefs.SetInt("timerModifier", Convert.ToInt32(timerSlider.value));
         PlayerPrefs.SetInt("targetModifier", Convert.ToInt32(targetSlider.value));
         PlayerPrefs.SetInt("livesModifier", Convert.ToInt32(livesSlider.value));
